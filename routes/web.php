@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SuratController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +19,11 @@ Route::get('/', function () {
 });
 
 
+// Rute untuk daftar barang
+Route::get('/surat', [SuratController::class, 'index'])->name('surat.index');
 
-Route ::get('/dasboard', [App\Http\Controllers\LandingPageController::class,'index']);
+// Rute untuk menampilkan form tambah barang
+Route::get('/surat/create', [SuratController::class, 'create'])->name('surat.create');
+
+// Rute untuk menyimpan barang baru
+Route::post('/surat', [SuratController::class, 'store'])->name('surat.store');
