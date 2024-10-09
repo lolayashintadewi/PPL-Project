@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SuratController;
+use App\Models\Surat;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,17 +14,18 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-// 
+
 Route::get('/', function () {
     return view('welcome');
 });
 
 
-// Rute untuk daftar barang
+// Rute untuk daftar surat
 Route::get('/surat', [SuratController::class, 'index'])->name('surat.index');
-
-// Rute untuk menampilkan form tambah barang
+// Rute untuk menampilkan form tambah surat
 Route::get('/surat/create', [SuratController::class, 'create'])->name('surat.create');
-
-// Rute untuk menyimpan barang baru
-Route::post('/surat', [SuratController::class, 'store'])->name('surat.store');
+Route::post("/surat",[SuratController::class, 'store'])->name('surat.store');
+Route::get('/surat/{surat}',[SuratController::class, 'edit'])->name('surat.edit');
+Route::put('surat/{surat}', [SuratController::class, 'update'])->name('surat.update');
+Route::delete('surat/{surat}', [SuratController::class, 'destroy'])->name('surat.destroy');
+//Route::resource('surat', SuratController::class);

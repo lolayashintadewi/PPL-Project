@@ -12,12 +12,8 @@ class SuratController extends Controller
      */
     public function index()
     {
-       // SuratController.php
-{
-    $data = Surat::all(); // Ambil semua data surat
-    return view('index', compact('data')); // Kirim data ke view
-}
-
+        $data = Surat::all(); // Ambil semua data surat
+        return view('index', compact('data')); // Kirim data ke view
     }
 
     /**
@@ -34,54 +30,63 @@ class SuratController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nomor_surat' => 'required|string|max:50', // Validasi untuk nama barang
-            'jenis_surat' => 'required|string', // Validasi untuk kategori
-            'pengirim' => 'required|string', // Validasi untuk deskripsi
-            'penerima' => 'required|numeric|min:0', // Validasi untuk harga
-           'tanggal_surat' => 'required|date',
+            'nomor_surat' => 'required|string|max:50',
+            'jenis_surat' => 'required|string',
+            'pengirim' => 'required|string',
+            'penerima' => 'required|string', // Pastikan tipe sesuai
+            'tanggal_surat' => 'required|date',
             'tanggal_terima' => 'nullable|date',
             'perihal' => 'required|string',
             'lampiran' => 'nullable|string',
-            'status' => 'required|in:diproses,selesai,ditolak', // Status yang sesuai
-
+            'status' => 'required|in:diproses,selesai,ditolak', // Validasi status
         ]);
 
-        $surat = Surat::create($request->all()); // Menggunakan model Barang
+        $surat = Surat::create($request->all()); // Simpan surat baru
+
         if ($surat) {
-            return redirect()->route('surat.index')->with('success', 'Data barang berhasil ditambahkan'); // Mengarahkan ke rute index barang
+            return redirect()->route('surat.index')->with('success', 'Data surat berhasil ditambahkan');
         }
 
-        //
-    }
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return redirect()->back()->with('error', 'Gagal menambahkan surat');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Surat $surat)
     {
-        //
+        return view("edit", ["surat" => $surat]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Surat $surat)
     {
-        //
+        //dd($surat);;
+        $validated = $request->validate([
+            'nomor_surat' => 'required|string|max:50',
+            'jenis_surat' => 'required|string',
+            'pengirim' => 'required|string',
+            'penerima' => 'required|string', // Pastikan tipe sesuai
+            'tanggal_surat' => 'required|date',
+            'tanggal_terima' => 'nullable|date',
+            'perihal' => 'required|string',
+            'lampiran' => 'nullable|string',
+            'status' => 'required|in:diproses,selesai,ditolak',
+        ]);
+
+        $surat->update($validated); // Update model surat
+
+        return redirect()->route('surat.index')->with('success', 'Surat Berhasil Diubah');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Surat $surat)
     {
-        //
+        $surat->delete(); // Hapus surat
+        return redirect()->route('surat.index')->with('success', 'Surat Berhasil Dihapus');
     }
 }
