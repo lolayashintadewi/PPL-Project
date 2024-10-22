@@ -22,9 +22,12 @@ return new class extends Migration
             $table->text('perihal'); // Perihal atau subjek surat
             $table->string('lampiran')->nullable(); // Lampiran, jika ada
             $table->enum('status', ['diproses', 'selesai', 'ditolak']); // Status surat
+
+            // Foreign key untuk Detail
+            $table->foreignId('detail_id')->constrained('details')->onDelete('cascade');
+
             $table->timestamps(); // Timestamps for created_at and updated_at
         });
-
     }
 
     /**
